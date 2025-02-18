@@ -8,26 +8,36 @@ const int MOTOR_B_INPUT2 = 9; // BI2
 
 //This are the constant values for the JOYSTICK DEADZONE
 //This should be costumized as per the TEAMS preference
-const int LEFT_DEADZONE = 128;
-const int RIGHT_DEADZONE = 128;
-const int UP_DEADZONE = 128;
-const int DOWN_DEADZONE = 128;
+const int LEFT_DEADZONE = 100;
+const int RIGHT_DEADZONE = 100;
+const int UP_DEADZONE = 100;
+const int DOWN_DEADZONE = 100;
 
 //value reading when the deadzone is at the origin
-const int ORIGIN = 255;
-const int MAX_DIST = 145;
+const int ORIGIN = 512;
+const int MAX_DIST = 512;
 
-void turn(int x, int y){
+void move(int x, int y){
 
-  int motor_power, steer, power_opposite_side, power_turning_side;
+  int power_opposite_side, power_turning_side;
+  float motor_power, steer; 
 
   //power of the motor will be determined by the distance bewteen joystick and origin
-  motor_power = (int)(sqrt(pow((x - ORIGIN),2) + pow((y - ORIGIN),2)));
-  
-  steer = (int)(sqrt(pow((x - ORIGIN),2)));
+  motor_power = sqrt(pow((x - ORIGIN),2) + pow((y - ORIGIN),2));
+  Serial.print("Motor Power: ");
+  Serial.println(motor_power);
 
+  
+  steer = sqrt(pow((x - ORIGIN),2));
+  Serial.print("Steer: ");
+  Serial.println(steer);
+
+  //MISTAKE HERE UPDATE NEEDED
   power_opposite_side = (int)(motor_power*(((steer/MAX_DIST)+1)/2)); 
-  power_turning_side = (int)(motor_power*(((steer/MAX_DIST)-1)/2)); 
+  power_turning_side = (int)(motor_power*((((steer/MAX_DIST)-1)/2));
+  Serial.print(power_opposite_side);
+  Serial.print(" ");
+  Serial.println(power_turning_side); 
 
   if(y > ORIGIN + UP_DEADZONE){
 
@@ -38,15 +48,8 @@ void turn(int x, int y){
     digitalWrite(MOTOR_B_INPUT1,LOW);
     digitalWrite(MOTOR_B_INPUT2,HIGH);
 
-    if(x > ORIGIN + RIGHT_DEADZONE){
-      analogWrite(PWM_MOTOR_A, power_opposite_side);
-      analogWrite(PWM_MOTOR_B, power_turning_side);
-    } 
-    else if( x < ORIGIN - LEFT_DEADZONE){
-      analogWrite(PWM_MOTOR_A, power_opposite_side);
-      analogWrite(PWM_MOTOR_B, power_turning_side);
-
-    }
+    analogWrite(PWM_MOTOR_A, power_opposite_side);
+    analogWrite(PWM_MOTOR_B, power_turning_side);
   }
   else if(y < ORIGIN - DOWN_DEADZONE){
     //adjust to move backward
@@ -56,16 +59,8 @@ void turn(int x, int y){
     digitalWrite(MOTOR_B_INPUT2,LOW);
     digitalWrite(MOTOR_B_INPUT1,HIGH);
 
-
-    if(x > ORIGIN + RIGHT_DEADZONE){
-      analogWrite(PWM_MOTOR_A, power_opposite_side);
-      analogWrite(PWM_MOTOR_B, power_turning_side);
-    } 
-    else if( x < ORIGIN - LEFT_DEADZONE){
-      analogWrite(PWM_MOTOR_A, power_opposite_side);
-      analogWrite(PWM_MOTOR_B, power_turning_side);
-
-    }
+    analogWrite(PWM_MOTOR_A, power_opposite_side);
+    analogWrite(PWM_MOTOR_B, power_turning_side);
   }
 
   delay(100);
@@ -74,6 +69,8 @@ void turn(int x, int y){
 
 
 void setup() {
+  Serial.begin(9600);
+
   pinMode(PWM_MOTOR_A, OUTPUT);
   pinMode(PWM_MOTOR_B, OUTPUT);
 
@@ -95,5 +92,16 @@ void setup() {
 void loop() {
 
   //instert random reading values here
+  move(ORIGIN,700);
+
+  delay(1000);
+
+  move(ORIGIN,200);
+
+  delay(1000);
+
+  move(200, 1000);
+
+  delay(1000);
 
 }
