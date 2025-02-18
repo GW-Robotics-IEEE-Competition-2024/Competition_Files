@@ -8,8 +8,7 @@ const int MOTOR_B_INPUT2 = 9; // BI2
 
 //This are the constant values for the JOYSTICK DEADZONE
 //This should be costumized as per the TEAMS preference
-const int LEFT_DEADZONE = 100;
-const int RIGHT_DEADZONE = 100;
+const int SIDE_DEADZONE = 100;
 const int UP_DEADZONE = 100;
 const int DOWN_DEADZONE = 100;
 
@@ -23,9 +22,7 @@ void move(int x, int y){
   float motor_power, steer; 
 
   //power of the motor will be determined by the distance bewteen joystick and origin
-  motor_power = sqrt(pow((x - ORIGIN),2) + pow((y - ORIGIN),2));
-
-  
+  motor_power = sqrt(pow((x - ORIGIN),2) + pow((y - ORIGIN),2)); 
   steer = sqrt(pow((x - ORIGIN),2));
 
   //MISTAKE HERE UPDATE NEEDED
@@ -42,7 +39,7 @@ void move(int x, int y){
     digitalWrite(MOTOR_B_INPUT1,LOW);
     digitalWrite(MOTOR_B_INPUT2,HIGH);
 
-    if(x > ORIGIN + RIGHT_DEADZONE){
+    if(x > ORIGIN + SIDE_DEADZONE){
 
       analogWrite(PWM_MOTOR_A, power_opposite_side);
       analogWrite(PWM_MOTOR_B, power_turning_side);
@@ -63,7 +60,7 @@ void move(int x, int y){
     digitalWrite(MOTOR_B_INPUT2,LOW);
     digitalWrite(MOTOR_B_INPUT1,HIGH);
 
-    if(x > ORIGIN + RIGHT_DEADZONE){
+    if(x > ORIGIN + SIDE_DEADZONE){
 
       analogWrite(PWM_MOTOR_A, power_opposite_side);
       analogWrite(PWM_MOTOR_B, power_turning_side);
