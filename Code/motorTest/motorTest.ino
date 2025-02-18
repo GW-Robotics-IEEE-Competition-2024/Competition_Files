@@ -15,7 +15,7 @@ const int DOWN_DEADZONE = 100;
 
 //value reading when the deadzone is at the origin
 const int ORIGIN = 512;
-const int MAX_DIST = 512;
+const int MAX_DIST = 1024;
 
 void move(int x, int y){
 
@@ -24,20 +24,14 @@ void move(int x, int y){
 
   //power of the motor will be determined by the distance bewteen joystick and origin
   motor_power = sqrt(pow((x - ORIGIN),2) + pow((y - ORIGIN),2));
-  Serial.print("Motor Power: ");
-  Serial.println(motor_power);
 
   
   steer = sqrt(pow((x - ORIGIN),2));
-  Serial.print("Steer: ");
-  Serial.println(steer);
 
   //MISTAKE HERE UPDATE NEEDED
   power_opposite_side = (int)(motor_power*(((steer/MAX_DIST)+1)/2)); 
-  power_turning_side = (int)(motor_power*((((steer/MAX_DIST)-1)/2));
-  Serial.print(power_opposite_side);
-  Serial.print(" ");
-  Serial.println(power_turning_side); 
+  power_turning_side = (int)(motor_power*(((steer/MAX_DIST)-1)/2));
+
 
   if(y > ORIGIN + UP_DEADZONE){
 
@@ -48,8 +42,18 @@ void move(int x, int y){
     digitalWrite(MOTOR_B_INPUT1,LOW);
     digitalWrite(MOTOR_B_INPUT2,HIGH);
 
-    analogWrite(PWM_MOTOR_A, power_opposite_side);
-    analogWrite(PWM_MOTOR_B, power_turning_side);
+    if(x > ORIGIN + RIGHT_DEADZONE){
+
+      analogWrite(PWM_MOTOR_A, power_opposite_side);
+      analogWrite(PWM_MOTOR_B, power_turning_side);
+
+    } else {
+
+      analogWrite(PWM_MOTOR_A, power_turning_side);
+      analogWrite(PWM_MOTOR_B, power_opposite_side);
+
+    }
+    
   }
   else if(y < ORIGIN - DOWN_DEADZONE){
     //adjust to move backward
@@ -59,8 +63,17 @@ void move(int x, int y){
     digitalWrite(MOTOR_B_INPUT2,LOW);
     digitalWrite(MOTOR_B_INPUT1,HIGH);
 
-    analogWrite(PWM_MOTOR_A, power_opposite_side);
-    analogWrite(PWM_MOTOR_B, power_turning_side);
+    if(x > ORIGIN + RIGHT_DEADZONE){
+
+      analogWrite(PWM_MOTOR_A, power_opposite_side);
+      analogWrite(PWM_MOTOR_B, power_turning_side);
+
+    } else {
+
+      analogWrite(PWM_MOTOR_A, power_turning_side);
+      analogWrite(PWM_MOTOR_B, power_opposite_side);
+
+    }
   }
 
   delay(100);
