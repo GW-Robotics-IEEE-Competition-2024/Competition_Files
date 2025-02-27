@@ -1,5 +1,5 @@
 # GW ROBOTICS X IEEE ROBOTICS COMPETITION 2024
-## By @MinThihaSoe, @ndremferraz, and (put Femi`s Handle here later) 
+## By @MinThihaSoe, @ndremferraz, and (put Femi's Handle here later) 
 ### For the Fall Semester of 2024 GW Robotics and IEEE student organization decided to host a Sumo Robotics Competition :checkered_flag: :video_game: 
 This repository contain all the files belonging to the competition so the competition can be recreated in future semesters
 
